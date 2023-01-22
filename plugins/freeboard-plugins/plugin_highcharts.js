@@ -361,6 +361,7 @@
 				chart: {
 					type: thisWidgetChartType,
 					animation: Highcharts.svg,
+					width: thisWidgetContainer.width(),
 					marginRight: 20
 				},
 				title: {
