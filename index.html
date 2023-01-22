@@ -23,9 +23,9 @@
                     { //DOM Ready
                         freeboard.initialize(true);
 
-                        var hashpattern = window.location.hash.match(/(&|#)source=([^&]+)/);
-                        if (hashpattern !== null) {
-                            $.getJSON(hashpattern[2], function(data) {
+                        var searchpattern = window.location.search.match(/(\?|&|#)source=([^&]+)/);
+                        if (searchpattern !== null) {
+                            $.getJSON(searchpattern[2], function(data) {
                                 freeboard.loadDashboard(data, function() {
                                     freeboard.setEditing(false);
                                 });
