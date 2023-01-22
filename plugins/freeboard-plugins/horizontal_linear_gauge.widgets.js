@@ -47,10 +47,10 @@
             $(element).append(titleElement.html(currentSettings.title)).append(gaugeElement);
 
             width = gaugeElement.width();
-            height = 160;
+            height = currentSettings.compact_layout ? 50 : 160;
 
             var gaugeWidth = 160;
-            var gaugeHeight = 30;
+            var gaugeHeight = 25;
 
             paper = Raphael(gaugeElement.get()[0], width, height);
             paper.clear();
@@ -79,30 +79,52 @@
                 "text-anchor": "start"
             });
 
+            // fill to 0 percent
+            gaugeFill = paper.rect(width / 2 - gaugeWidth / 2, height / 3 - gaugeHeight / 2, 0, gaugeHeight);
+
             // place units and value
             var units = _.isUndefined(currentSettings.units) ? "" : currentSettings.units;
 
-            valueText = paper.text(width / 2, height * 2 / 3, "");
-            unitsText = paper.text(width / 2, height * 2 / 3 + 20, units);
+            if (currentSettings.compact_layout) {
+	            valueText = paper.text(width / 2, height / 3, "");
+	            unitsText = paper.text(width / 2, height / 3, units);
+	            
+	            valueText.attr({
+	                "font-family": "arial",
+	                "font-size": "16",
+	                "font-weight": "bold",
+	                "fill": "#000000",
+	                "text-anchor": "end"
+	            });
 
-            valueText.attr({
-                "font-family": "arial",
-                "font-size": "25",
-                "font-weight": "bold",
-                "fill": "#d3d4d4",
-                "text-anchor": "middle"
-            });
+	            unitsText.attr({
+	                "font-family": "arial",
+	                "font-size": "16",
+	                "font-weight": "normal",
+	                "fill": "#000000",
+	                "text-anchor": "start"
+	            });
+            }
+		    else {
+	            valueText = paper.text(width / 2, height * 2 / 3, "");
+	            unitsText = paper.text(width / 2, height * 2 / 3 + 20, units);
+	            
+	            valueText.attr({
+	                "font-family": "arial",
+	                "font-size": "25",
+	                "font-weight": "bold",
+	                "fill": "#d3d4d4",
+	                "text-anchor": "middle"
+	            });
 
-            unitsText.attr({
-                "font-family": "arial",
-                "font-size": "10",
-                "font-weight": "normal",
-                "fill": "#b3b3b3",
-                "text-anchor": "middle"
-            });
-
-            // fill to 0 percent
-            gaugeFill = paper.rect(width / 2 - gaugeWidth / 2, height / 3 - gaugeHeight / 2, 0, gaugeHeight);
+	            unitsText.attr({
+	                "font-family": "arial",
+	                "font-size": "10",
+	                "font-weight": "normal",
+	                "fill": "#b3b3b3",
+	                "text-anchor": "middle"
+	            });
+			}
         }
 
         self.onSettingsChanged = function (newSettings) {
@@ -145,7 +167,7 @@
         }
 
         self.getHeight = function () {
-            return 3;
+            return currentSettings.compact_layout ? 1 : 3;
         }
 
     };
@@ -154,9 +176,7 @@
         type_name: "horizontal-linear-gauge",
         display_name: "Horizontal Linear Gauge",
         "external_scripts" : [
-         "plugins/thirdparty/raphael.2.1.0.min.js",
-         //   "plugins/thirdparty/raphael.2.1.0-custom.js",
-        "plugins/thirdparty/colormix.2.0.0.min.js"
+         "plugins/thirdparty/raphael.2.1.0.min.js"
         ],
         settings: [
             {
@@ -185,6 +205,12 @@
                 display_name: "Maximum",
                 type: "number",
                 default_value: 100
+            },
+            {
+                name: "compact_layout",
+                display_name: "Compact layout",
+                type: "boolean",
+                default_value: false
             }
         ],
         newInstance: function (settings, newInstanceCallback) {
