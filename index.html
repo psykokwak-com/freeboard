@@ -11,15 +11,21 @@
     <script src="js/freeboard.thirdparty.min.js"></script>
     <script type="text/javascript">
         head.js("js/freeboard_plugins.min.js",
+		"plugins/freeboard-plugins/actuator.js",
+		"plugins/freeboard-plugins/horizontal_linear_gauge.widgets.js",
+		"plugins/freeboard-plugins/multi_horizontal_gauges.js",
+		"plugins/freeboard-plugins/plugin_highcharts.js",
+		"plugins/freeboard-plugins/slider-plugin.js",
+		"plugins/freeboard-plugins/switch.js",
                 // *** Load more plugins here ***
                 function(){
                     $(function()
                     { //DOM Ready
                         freeboard.initialize(true);
 
-                        var hashpattern = window.location.hash.match(/(&|#)source=([^&]+)/);
-                        if (hashpattern !== null) {
-                            $.getJSON(hashpattern[2], function(data) {
+                        var searchpattern = window.location.search.match(/(\?|&|#)source=([^&]+)/);
+                        if (searchpattern !== null) {
+                            $.getJSON(searchpattern[2], function(data) {
                                 freeboard.loadDashboard(data, function() {
                                     freeboard.setEditing(false);
                                 });
