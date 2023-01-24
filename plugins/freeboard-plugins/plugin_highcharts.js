@@ -92,8 +92,8 @@
 			"display_name": "Time series (Highcharts)",
 			"description": "Time series line chart.",
 			"external_scripts": [
-				"https://code.highcharts.com/8.0.0/highcharts.js",
-				"https://code.highcharts.com/8.0.0/modules/exporting.js"
+				"https://code.highcharts.com/10.3/highcharts.js",
+				"https://code.highcharts.com/10.3/modules/exporting.js"
 			],
 			"fill_size": true,
 			"settings": highchartsLineWidgetSettings,
@@ -355,13 +355,14 @@
 			// Create widget
 			thisWidgetContainer
 				.css('height', 60 * self.getHeight() - 10 + 'px');
-			thisWidgetContainer.css('width', '100%');
+
+			// Remember the container width, to reflow the chart when needed
+			thisWidgetContainer.lastKnownContainerWidth = thisWidgetContainer.width();
 
 			thisWidgetContainer.highcharts({
 				chart: {
 					type: thisWidgetChartType,
 					animation: Highcharts.svg,
-					width: thisWidgetContainer.width(),
 					marginRight: 20
 				},
 				title: {
@@ -448,6 +449,12 @@
 					var plotMqtt = [x, Number(newValue)]; //create the array+ "Y"
 					series.addPoint(plotMqtt, true, shift);
 				};
+			}
+
+			var currentContainerWidth = thisWidgetContainer.width();
+			if(thisWidgetContainer.lastKnownContainerWidth != currentContainerWidth) {
+				thisWidgetContainer.lastKnownContainerWidth = currentContainerWidth;
+				chart.reflow();
 			}
 		}
 
